@@ -17,12 +17,11 @@ public class MainController {
     private StudentRepository studentRepository;
 
 
-    @PostMapping(path="/student")
-    public ResponseEntity createStudent(@RequestBody Student student) throws URISyntaxException {
+    @PostMapping
+    public ResponseEntity createCar(@RequestBody Student student) throws URISyntaxException {
         Student savedStudent = studentRepository.save(student);
         return ResponseEntity.created(new URI("/student/" + savedStudent.getId())).body(savedStudent);
     }
-
     @PutMapping("/student/{id}")
     public ResponseEntity updateStudent(@PathVariable Integer id, @RequestBody Student student) {
         Student currentStudent = studentRepository.findById(id)
