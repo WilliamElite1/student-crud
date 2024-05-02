@@ -7,22 +7,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Optional;
 
 @Controller
-@RequestMapping(path="/quiambao")
+@RequestMapping(path="/students")
 public class MainController {
 
     @Autowired
     private StudentRepository studentRepository;
 
-
     @PostMapping
-    public ResponseEntity createCar(@RequestBody Student student) throws URISyntaxException {
+    public ResponseEntity createStudent(@RequestBody Student student) throws URISyntaxException {
         Student savedStudent = studentRepository.save(student);
-        return ResponseEntity.created(new URI("/student/" + savedStudent.getId())).body(savedStudent);
+        return ResponseEntity.created(new URI("/students/" + savedStudent.getId())).body(savedStudent);
     }
-    @PutMapping("/student/{id}")
+
+    @PutMapping("/{id}")
     public ResponseEntity updateStudent(@PathVariable Integer id, @RequestBody Student student) {
         Student currentStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
@@ -35,17 +35,17 @@ public class MainController {
         return ResponseEntity.ok(currentStudent);
     }
 
-    @GetMapping(path="/student")
+    @GetMapping
     public @ResponseBody Iterable<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
-    @GetMapping(path="/student/{id}")
+    @GetMapping(path="/{id}")
     public @ResponseBody Optional<Student> getStudent(@PathVariable Integer id) {
         return studentRepository.findById(id);
     }
 
-    @DeleteMapping(path="/student/{id}")
+    @DeleteMapping(path="/{id}")
     public @ResponseBody String deleteStudent(@PathVariable Integer id) {
         try {
             studentRepository.deleteById(id);
