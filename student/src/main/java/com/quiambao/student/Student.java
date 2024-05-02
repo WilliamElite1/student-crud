@@ -4,13 +4,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 @Entity
 public class Student {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    private String firstName;
+    private String lastName;
+    private String course;
+    private String studentNumber;
 
+    // Default constructor
+    public Student() {
+    }
+
+    // Constructor with arguments
+    public Student(String firstName, String lastName, String course, String studentNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.course = course;
+        this.studentNumber = studentNumber;
+    }
+
+    // Getters and setters
     public Integer getId() {
         return id;
     }
@@ -20,19 +38,19 @@ public class Student {
     }
 
     public String getFirstName() {
-        return FirstName;
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
-        FirstName = firstName;
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getCourse() {
@@ -44,16 +62,10 @@ public class Student {
     }
 
     public String getStudentNumber() {
-        return StudentNumber;
+        return studentNumber;
     }
 
     public void setStudentNumber(String studentNumber) {
-        StudentNumber = studentNumber;
+        this.studentNumber = studentNumber;
     }
-
-    private String FirstName;
-    private String LastName;
-    private String course;
-    private String StudentNumber;
-
 }

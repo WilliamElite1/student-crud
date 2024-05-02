@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(path="/students")
+@RequestMapping(path="/quiambao/student") // Updated URI
 public class MainController {
 
     @Autowired
@@ -19,20 +19,20 @@ public class MainController {
     @PostMapping
     public ResponseEntity createStudent(@RequestBody Student student) throws URISyntaxException {
         Student savedStudent = studentRepository.save(student);
-        return ResponseEntity.created(new URI("/students/" + savedStudent.getId())).body(savedStudent);
+        return ResponseEntity.created(new URI("/quiambao/student/" + savedStudent.getId())).body(savedStudent);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity updateStudent(@PathVariable Integer id, @RequestBody Student student) {
         Student currentStudent = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("No student found with id: " + id));
 
         currentStudent.setFirstName(student.getFirstName());
         currentStudent.setLastName(student.getLastName());
         currentStudent.setCourse(student.getCourse());
         currentStudent.setStudentNumber(student.getStudentNumber());
         currentStudent = studentRepository.save(currentStudent);
-        return ResponseEntity.ok(currentStudent);
+        return ResponseEntity.ok("Student with id " + id + " updated.");
     }
 
     @GetMapping
@@ -41,17 +41,33 @@ public class MainController {
     }
 
     @GetMapping(path="/{id}")
-    public @ResponseBody Optional<Student> getStudent(@PathVariable Integer id) {
-        return studentRepository.findById(id);
+    public @ResponseBody ResponseEntity<?> getStudent(@PathVariable Integer id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent()) {
+            return ResponseEntity.ok(student.get());
+        } else {
+            return ResponseEntity.badRequest().body("No student found with id: " + id);
+        }
     }
 
     @DeleteMapping(path="/{id}")
-    public @ResponseBody String deleteStudent(@PathVariable Integer id) {
-        try {
+    public @ResponseBody ResponseEntity<?> deleteStudent(@PathVariable Integer id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent()) {
             studentRepository.deleteById(id);
-            return "Deleted";
-        } catch (Exception e) {
-            return "Error: " + e.getMessage();
+            return ResponseEntity.ok("Student with id " + id + " deleted.");
+        } else {
+            return ResponseEntity.badRequest().body("No student found with id: " + id);
         }
+    }
+
+    @PostMapping(path="/new") // Modified URI
+    public ResponseEntity<?> addNewStudent(@RequestParam String firstName,
+                                           @RequestParam String lastName,
+                                           @RequestParam String course,
+                                           @RequestParam String studentNumber) {
+        Student student = new Student(firstName, lastName, course, studentNumber);
+        Student savedStudent = studentRepository.save(student);
+        return ResponseEntity.ok("New student with id " + savedStudent.getId() + " added.");
     }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import { withRouter } from 'react-router-dom';
 
 class StudentEdit extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ class StudentEdit extends Component {
         const { id } = this.props.match.params;
         if (id !== 'new') {
             try {
-                const response = await fetch(`/students/${id}`);
+                const response = await fetch(`/quiambao/student/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch student');
                 }
@@ -49,7 +49,7 @@ class StudentEdit extends Component {
         const { item } = this.state;
         const method = item.id ? 'PUT' : 'POST';
         try {
-            const response = await fetch(`/students${item.id ? '/' + item.id : ''}`, {
+            const response = await fetch(`/quiambao/student${item.id ? '/' + item.id : ''}`, {
                 method: method,
                 headers: {
                     'Accept': 'application/json',
@@ -117,7 +117,7 @@ class StudentEdit extends Component {
                             />
                         </FormGroup>
                         <Button color="primary" type="submit">Save</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/students">Cancel</Button>
+                        <Button color="secondary" onClick={() => this.props.history.push('/students')}>Cancel</Button>
                     </Form>
                 </Container>
             </div>

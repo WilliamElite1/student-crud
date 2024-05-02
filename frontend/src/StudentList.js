@@ -12,7 +12,7 @@ class StudentList extends Component {
     }
 
     componentDidMount() {
-        fetch('/students')
+        fetch('/quiambao/student')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
@@ -28,7 +28,7 @@ class StudentList extends Component {
     }    
 
     async remove(id) {
-        await fetch(`/students/${id}`, {
+        await fetch(`/quiambao/student/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -51,7 +51,7 @@ class StudentList extends Component {
                 <td>{student.studentNumber}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/students/" + student.id}>Edit</Button>
+                        <Button size="sm" color="primary" tag={Link} to={`/students/${student.id}`}>Edit</Button>
                         <Button size="sm" color="danger" onClick={() => this.remove(student.id)}>Delete</Button>
                     </ButtonGroup>
                 </td>
@@ -73,6 +73,7 @@ class StudentList extends Component {
                                 <th width="30%">Last Name</th>
                                 <th width="30%">Course</th>
                                 <th width="30%">Student Number</th>
+                                <th width="10%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
